@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Enrollment Form</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Student Enrollment Form</h2>
+        <form id="studentForm">
+            <div class="form-group">
+                <label for="rollNo">Roll No:</label>
+                <input type="text" class="form-control" id="rollNo" name="rollNo" required>
+            </div>
+            <div class="form-group">
+                <label for="fullName">Full Name:</label>
+                <input type="text" class="form-control" id="fullName" name="fullName" disabled>
+            </div>
+            <div class="form-group">
+                <label for="class">Class:</label>
+                <input type="text" class="form-control" id="class" name="class" disabled>
+            </div>
+            <div class="form-group">
+                <label for="birthDate">Birth Date:</label>
+                <input type="date" class="form-control" id="birthDate" name="birthDate" disabled>
+            </div>
+            <div class="form-group">
+                <label for="address">Address:</label>
+                <textarea class="form-control" id="address" name="address" rows="3" disabled></textarea>
+            </div>
+            <div class="form-group">
+                <label for="enrollmentDate">Enrollment Date:</label>
+                <input type="date" class="form-control" id="enrollmentDate" name="enrollmentDate" disabled>
+            </div>
+            <button type="button" class="btn btn-primary" id="saveBtn" onclick="saveStudent()" disabled>Save</button>
+            <button type="button" class="btn btn-warning" id="updateBtn" onclick="updateStudent()" disabled>Update</button>
+            <button type="button" class="btn btn-secondary" id="resetBtn" onclick="resetForm()">Reset</button>
+        </form>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            resetForm();
+        });
+
+        function validateForm() {
+            if ($("#rollNo").val() === "") {
+                alert("Roll No is required.");
+                $("#rollNo").focus();
+                return false;
+            }
+            if ($("#fullName").val() === "" || $("#class").val() === "" ||
+                $("#birthDate").val() === "" || $("#address").val() === "" ||
+                $("#enrollmentDate").val() === "") {
+                alert("All fields are required.");
+                return false;
+            }
+            return true;
+        }
+
+        function resetForm() {
+            $("#rollNo").val("").focus();
+            $("#fullName").val("").prop("disabled", true);
+            $("#class").val("").prop("disabled", true);
+            $("#birthDate").val("").prop("disabled", true);
+            $("#address").val("").prop("disabled", true);
+            $("#enrollmentDate").val("").prop("disabled", true);
+            $("#saveBtn").prop("disabled", true);
+            $("#updateBtn").prop("disabled", true);
+        }
+
+        function saveStudent() {
+            if (!validateForm()) return;
+
+            var studentData = {
+                rollNo: $("#rollNo").val(),
+                fullName: $("#fullName").val(),
+                class: $("#class").val(),
+                birthDate: $("#birthDate").val(),
+                address: $("#address").val(),
+                enrollmentDate: $("#enrollmentDate").val()
+            };
+
+            $.ajax({
+                url: 'http://api.login2explore.com:5577/api/iml',
+                type: 'POST',
+                headers: {
+                    'Authorization': 'Bearer 90932065|-31949218313598211|90962430',
+                    'Content-Type': 'application/json'
+                },
+                data: JSON.stringify({
+                    "token": "90932065|-31949218313598211|90962430",
+                    "cmd": "PUT_ALL",
+                    "dbName": "Employee",
+                    "rel": "index",
+                    "templateStr": {},
+                    "colsAutoIndex": true,
+                    "jsonStr": [studentData]
+                }),
+                success: function (response) {
+                    alert("Student saved successfully!");
+                    resetForm();
+                },
+                error: function (error) {
+                    alert("Error saving student.");
+                }
+            });
+        }
+
+        function updateStudent() {
+            if (!validateForm()) return;
+
+            var studentData = {
+                rollNo: $("#rollNo").val(),
+                fullName: $("#fullName").val(),
+                class: $("#class").val(),
+                birthDate: $("#birthDate").val(),
+                address: $("#address").val(),
+                enrollmentDate: $("#enrollmentDate").val()
+            };
+
+            $.ajax({
+                url: 'http://api.login2explore.com:5577/api/iml',
+                type: 'POST',
+                headers: {
+                    'Authorization': 'Bearer 90932065|-31949218313598211|90962430',
+                    'Content-Type': 'application/json'
+                },
+                data: JSON.stringify({
+                    "token": "90932065|-31949218313598211|90962430",
+                    "cmd": "PUT_ALL",
+                    "dbName": "Employee",
+                    "rel": "index",
+                    "templateStr": {},
+                    "colsAutoIndex": true,
+                    "jsonStr": [studentData]
+                }),
+                success: function (response) {
+                    alert("Student updated successfully!");
+                    resetForm();
+                },
+                error: function (error) {
+                    alert("Error updating student.");
+                }
+            });
+        }
+
+        $("#rollNo").on('blur', function () {
+            var rollNo = $(this).val();
+            if (rollNo) {
+                $.ajax({
+                    url: 'http://api.login2explore.com:5577/api/iml',
+                    type: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer 90932065|-31949218313598211|90962430',
+                        'Content-Type': 'application/json'
+                    },
+                    data: JSON.stringify({
+                        "token": "90932065|-31949218313598211|90962430",
+                        "cmd": "GET_BY_KEY",
+                        "dbName": "Employee",
+                        "rel": "index",
+                        "templateStr": {},
+                        "jsonStr": [{ "rollNo": rollNo }]
+                    }),
+                    success: function (response) {
+                        if (response && response.jsonStr && response.jsonStr.length > 0) {
+                            var student = response.jsonStr[0];
+                            $("#fullName").val(student.fullName).prop("disabled", false);
+                            $("#class").val(student.class).prop("disabled", false);
+                            $("#birthDate").val(student.birthDate).prop("disabled", false);
+                            $("#address").val(student.address).prop("disabled", false);
+                            $("#enrollmentDate").val(student.enrollmentDate).prop("disabled", false);
+                            $("#updateBtn").prop("disabled", false);
+                            $("#saveBtn").prop("disabled", true);
+                        } else {
+                            $("#fullName").prop("disabled", false);
+                            $("#class").prop("disabled", false);
+                            $("#birthDate").prop("disabled", false);
+                            $("#address").prop("disabled", false);
+                            $("#enrollmentDate").prop("disabled", false);
+                            $("#saveBtn").prop("disabled", false);
+                            $("#updateBtn").prop("disabled", true);
+                        }
+                    },
+                    error: function (error) {
+                        alert("Error fetching student data.");
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
