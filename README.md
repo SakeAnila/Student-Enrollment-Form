@@ -4,7 +4,7 @@
 The **Student Enrollment Form** project is a web-based application designed to facilitate the management of student information. Developed using HTML, CSS, and JavaScript, this form allows users to input and manage essential student details including Roll Number, Full Name, Class, Birth Date, and Address. The application integrates with JsonPowerDB to perform real-time data operations, such as saving and updating student records through AJAX requests. The form is designed to be user-friendly and responsive, ensuring accessibility on both desktop and mobile devices.
 
 ## Benefits of Using JsonPowerDB
-JsonPowerDB is a powerful and versatile JSON-based database that offers several advantages for web applications:
+JsonPowerDB is a powerful and versatile JSON-based database that offers several advantages for web applications:-
 
 - **Easy Integration:** JsonPowerDB provides a straightforward API that simplifies the integration process for web applications. Its RESTful endpoints make it easy to perform CRUD (Create, Read, Update, Delete) operations with minimal effort.
 - **Real-Time Data Handling:** JsonPowerDB supports real-time data updates, which means changes to the database are reflected instantly in the application without requiring page reloads.
